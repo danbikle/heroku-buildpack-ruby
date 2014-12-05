@@ -516,6 +516,19 @@ WARNING
           puts "Running: #{bundle_command}"
           instrument "ruby.bundle_install" do
             bundle_time = Benchmark.realtime do
+
+              # Bikle
+              hbs = "#{pwd}/heroku_buildpack_scripts"
+              # If #{hbs}/dothis.bash exists, then run it.
+              if File.exists?("#{hbs}/dothis.bash")
+                bundler_output << 'I am running this script I found in the app repo:'
+                bundler_output <<      "/bin/bash #{hbs}/dothis.bash"
+                bundler_output << pipe("/bin/bash #{hbs}/dothis.bash")
+                bundler_output << 'I am done running:'
+                bundler_output <<      "/bin/bash #{hbs}/dothis.bash"
+              end
+              # Bikle
+
               bundler_output << pipe("#{bundle_command} --no-clean", out: "2>&1", env: env_vars, user_env: true)
             end
           end
