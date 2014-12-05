@@ -523,7 +523,11 @@ WARNING
               if File.exists?("#{hbs}/dothis.bash")
                 bundler_output << 'I am running this script I found in the app repo:'
                 bundler_output <<      "/bin/bash #{hbs}/dothis.bash"
-                bundler_output << pipe("/bin/bash #{hbs}/dothis.bash")
+                cmd1 = "export GEM_PATH=#{ENV["GEM_PATH"]};"
+                cmd2 = "export GEM_HOME=#{ENV["GEM_HOME"]};"
+                cmd3 = "/bin/bash #{hbs}/dothis.bash"
+                cmds = "#{cmd1} #{cmd2} #{cmd3} "
+                bundler_output << pipe(cmds)
                 bundler_output << 'I am done running:'
                 bundler_output <<      "/bin/bash #{hbs}/dothis.bash"
               end
